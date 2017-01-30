@@ -10,7 +10,7 @@ int dlclose(void *handle);
 
 
 namespace mutils{
-	struct DynamicModule::Internals::c_internals{
+	struct DynamicModule::c_internals{
 		const std::string filename;
 		void *mod_handle;
 		c_internals(const std::string& filename)
@@ -24,8 +24,8 @@ namespace mutils{
 		}
 	};
 
-	DynamicModule(const std::string filename)
-		:state(new Internals(new Internals::c_internals(filename)))
+	DynamicModule(const std::string &filename)
+		:i(new c_internals(filename))
 	{}
 
 	void* DynamicModule::load_symbol(char const * const name) const {
@@ -34,10 +34,7 @@ namespace mutils{
 		return ret;
 	}
 	
-	DynamicModule::Internals::Internals(c_internals const * const i)
-		:i(i){}
-	
-	DynamicModule::Internals::~Internals(){
+	DynamicModule::~DynamicModule(){
 		delete i;
 	}
 }
